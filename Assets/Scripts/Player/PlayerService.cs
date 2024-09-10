@@ -4,10 +4,11 @@ using ServiceLocator.Player.Projectile;
 using ServiceLocator.UI;
 using ServiceLocator.Map;
 using ServiceLocator.Sound;
+using ServiceLocator.Utilities;
 
 namespace ServiceLocator.Player
 {
-    public class PlayerService : MonoBehaviour
+    public class PlayerService : GenericMonoSingleton<PlayerService>
     {
         [SerializeField] private SoundService soundService;
 
@@ -19,21 +20,6 @@ namespace ServiceLocator.Player
         private MonkeyView selectedMonkeyView;
         private int health;
         public int Money { get; private set; }
-
-        private static PlayerService instance;
-        public static PlayerService Instance { get { return instance; } }
-
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
-        }
         private void Start()
         {
             projectilePool = new ProjectilePool(playerScriptableObject.ProjectilePrefab, playerScriptableObject.ProjectileScriptableObjects);
