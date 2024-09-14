@@ -14,11 +14,12 @@ namespace ServiceLocator.UI
 
         public MonkeyCellController(Transform cellContainer, MonkeyCellView monkeyCellPrefab, MonkeyCellScriptableObject monkeyCellScriptableObject, PlayerService playerService)
         {
-            this.playerService = playerService;
+           
             this.monkeyCellSO = monkeyCellScriptableObject;
             monkeyCellView = Object.Instantiate(monkeyCellPrefab, cellContainer);
             monkeyCellView.SetController(this);
             monkeyCellView.ConfigureCellUI(monkeyCellSO.Sprite, monkeyCellSO.Name, monkeyCellSO.Cost);
+            this.playerService = playerService;
         }
 
         public void MonkeyDraggedAt(Vector3 dragPosition)

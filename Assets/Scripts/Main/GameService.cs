@@ -11,11 +11,11 @@ namespace ServiceLocator.Main
 	public class GameService : MonoBehaviour
 	{
 		// Services:
-		private EventService EventService;
-		private MapService MapService;
-		private WaveService WaveService;
-		private SoundService SoundService;
-		private PlayerService PlayerService;
+		private EventService eventService;
+		private MapService mapService;
+		private WaveService waveService;
+		private SoundService soundService;
+		private PlayerService playerService;
 
 		[SerializeField] private UIService uiService;
 		public UIService UIService => uiService;
@@ -39,24 +39,24 @@ namespace ServiceLocator.Main
 		
 		private void CreateService()
 		{
-			EventService = new EventService();
-			MapService = new MapService(mapScriptableObject);
-			WaveService = new WaveService(waveScriptableObject);
-			SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
-			PlayerService = new PlayerService(playerScriptableObject);
+			eventService = new EventService();
+			mapService = new MapService(mapScriptableObject);
+			waveService = new WaveService(waveScriptableObject);
+			soundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
+			playerService = new PlayerService(playerScriptableObject);
 		}
 
 		private void InitDependencies()
 		{
-			PlayerService.Init(UIService, MapService, SoundService);
-			WaveService.Init(UIService, EventService, MapService, SoundService, PlayerService);
-			UIService.Init(EventService, WaveService);
-			MapService.Init(EventService);
+			playerService.Init(UIService, mapService, soundService);
+			waveService.Init(UIService, eventService, mapService, soundService, playerService);
+			UIService.Init(eventService, waveService, playerService);
+			mapService.Init(eventService);
 		}
 
 		private void Update()
 		{
-			PlayerService.Update();
+			playerService.Update();
 		}
 	}
 }
