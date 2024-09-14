@@ -9,42 +9,53 @@ using ServiceLocator.UI;
 
 namespace ServiceLocator.Main
 {
-    public class GameService : GenericMonoSingleton<GameService>
-    {
-        // Services:
-        public EventService EventService { get; private set; }
-        public MapService MapService { get; private set; }
-        public WaveService WaveService { get; private set; }
-        public SoundService SoundService { get; private set; }
-        public PlayerService PlayerService { get; private set; }
+	public class GameService : GenericMonoSingleton<GameService>
+	{
+		// Services:
+		public EventService EventService { get; private set; }
+		public MapService MapService { get; private set; }
+		public WaveService WaveService { get; private set; }
+		public SoundService SoundService { get; private set; }
+		public PlayerService PlayerService { get; private set; }
 
-        [SerializeField] private UIService uiService;
-        public UIService UIService => uiService;
+		[SerializeField] private UIService uiService;
+		public UIService UIService => uiService;
 
 
-        // Scriptable Objects:
-        [SerializeField] private MapScriptableObject mapScriptableObject;
-        [SerializeField] private WaveScriptableObject waveScriptableObject;
-        [SerializeField] private SoundScriptableObject soundScriptableObject;
-        [SerializeField] private PlayerScriptableObject playerScriptableObject;
+		// Scriptable Objects:
+		[SerializeField] private MapScriptableObject mapScriptableObject;
+		[SerializeField] private WaveScriptableObject waveScriptableObject;
+		[SerializeField] private SoundScriptableObject soundScriptableObject;
+		[SerializeField] private PlayerScriptableObject playerScriptableObject;
 
-        // Scene Referneces:
-        [SerializeField] private AudioSource SFXSource;
-        [SerializeField] private AudioSource BGSource;
+		// Scene References:
+		[SerializeField] private AudioSource SFXSource;
+		[SerializeField] private AudioSource BGSource;
 
-        private void Start()
-        {
-            EventService = new EventService();
-            UIService.SubscribeToEvents();
-            MapService = new MapService(mapScriptableObject);
-            WaveService = new WaveService(waveScriptableObject);
-            SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
-            PlayerService = new PlayerService(playerScriptableObject);
-        }
+		private void Start()
+		{
+			CreateService();
+			InitDependencies();
+		}
+		
+		private void CreateService()
+		{
+			EventService = new EventService();
+			UIService.SubscribeToEvents();
+			MapService = new MapService(mapScriptableObject);
+			WaveService = new WaveService(waveScriptableObject);
+			SoundService = new SoundService(soundScriptableObject, SFXSource, BGSource);
+			PlayerService = new PlayerService(playerScriptableObject);
+		}
 
-        private void Update()
-        {
-            PlayerService.Update();
-        }
-    }
+		private void InitDependencies()
+		{
+			PlayerService.Init(UIService, MapService, SoundService);
+		}
+
+		private void Update()
+		{
+			PlayerService.Update();
+		}
+	}
 }
