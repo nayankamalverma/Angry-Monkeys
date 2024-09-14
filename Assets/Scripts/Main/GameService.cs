@@ -49,7 +49,7 @@ namespace ServiceLocator.Main
 		private void InitDependencies()
 		{
 			PlayerService.Init(UIService, MapService, SoundService);
-			WaveService.Init(UIService, EventService, MapService, SoundService);
+			WaveService.Init(UIService, EventService, MapService, SoundService, PlayerService);
 			UIService.Init(EventService, WaveService);
 			MapService.Init(EventService);
 		}
